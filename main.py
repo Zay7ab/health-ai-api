@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
-sys.path.append(os.path.dirname(__file__))
 
-from routers import heart, xray, chat, bmi, risk, symptoms, tips, history, report, doctor, emergency
+# Add app directory to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 app = FastAPI(
     title="HealthAI API",
@@ -19,6 +19,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Import routers after path fix
+from routers import heart, xray, chat, bmi, risk, symptoms, tips, history, report, doctor, emergency
 
 app.include_router(heart.router, prefix="/predict", tags=["Heart Disease"])
 app.include_router(xray.router, prefix="/predict", tags=["X-Ray Analysis"])
@@ -36,23 +39,14 @@ app.include_router(emergency.router, prefix="/emergency", tags=["Emergency"])
 def root():
     return {
         "message": "HealthAI API is running!",
-        "version": "1.0.0",
-        "endpoints": [
-            "/predict/heart",
-            "/predict/xray",
-            "/chat",
-            "/bmi",
-            "/risk",
-            "/symptoms/check",
-            "/tips/generate",
-            "/tips/daily",
-            "/history/analyze",
-            "/report/notes",
-            "/doctor/find",
-            "/emergency/firstaid"
-        ]
+        "version": "1.0.0"
     }
 
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "api": "HealthAI"}
+```
+
+Also update the **Start Command** in Railway Settings to:
+```
+uvicorn main:app --host 0.0.0.0 --port $PORT --app-dir /app
