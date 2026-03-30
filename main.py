@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
+
 from routers import heart, xray, chat, bmi, risk, symptoms, tips, history, report, doctor, emergency
 
 app = FastAPI(
@@ -8,7 +12,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Allow Streamlit to call this API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,7 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include all routers
 app.include_router(heart.router, prefix="/predict", tags=["Heart Disease"])
 app.include_router(xray.router, prefix="/predict", tags=["X-Ray Analysis"])
 app.include_router(chat.router, prefix="/chat", tags=["Chatbot"])
@@ -41,8 +43,9 @@ def root():
             "/chat",
             "/bmi",
             "/risk",
-            "/symptoms",
-            "/tips",
+            "/symptoms/check",
+            "/tips/generate",
+            "/tips/daily",
             "/history/analyze",
             "/report/notes",
             "/doctor/find",
