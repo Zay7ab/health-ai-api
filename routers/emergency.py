@@ -35,18 +35,3 @@ def get_firstaid(data: EmergencyInput):
         return {"instructions": response.choices[0].message.content}
     except Exception as e:
         return {"error": str(e)}
-```
-
----
-
-### File 14: `routers/__init__.py`
-
-Create empty file `routers/__init__.py` — just leave it blank.
-
----
-
-### File 15: `models/placeholder.txt`
-
-Create `models/placeholder.txt` with content:
-```
-Upload rf_model.pkl, scaler.pkl and xray_model.onnx here
